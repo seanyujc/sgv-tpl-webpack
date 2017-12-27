@@ -27,15 +27,15 @@ export function createCommon(ctor: ICommonConstructor): ICommon {
 
 export class Common implements ICommon {
 
-  private msgs: string[];
-  private isShowModal: boolean;
+  // private msgs: string[];
+  // private isShowModal: boolean;
 
   private configAdapter: IConfigAdapter;
 
   constructor() {
     this.configAdapter = SGVFactory.createConfigAdapter();
-    this.msgs = [];
-    this.isShowModal = false;
+    // this.msgs = [];
+    // this.isShowModal = false;
   }
 
   dealPath(apiKey = "", method = "GET"): string {

@@ -67,6 +67,6 @@ module.exports = {
 	],
 	devtool: 'source-map',
 	devServer: {
-		publicPath: path.join('/dist/')
+		publicPath: path.join('/')
 	}
 };

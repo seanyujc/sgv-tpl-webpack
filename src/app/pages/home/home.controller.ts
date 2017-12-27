@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
-import Common from "../../core/common";
+// import Common from "../../core/common";
 
 // console.log(styles);
 @Component({

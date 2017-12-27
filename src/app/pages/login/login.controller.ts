@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
-import Common from "../../core/common";
+// import Common from "../../core/common";
 import { AutowiredService } from "../../../lib/sg-resource/decorators";
 import { ICommonService } from "../../core/services/common.serv";
 

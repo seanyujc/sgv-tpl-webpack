@@ -117,7 +117,7 @@ export class ConfigAdapter implements IConfigAdapter {
 
   private URL_TPL = "//{DOMAIN}{HOST_API}?appId=APPID&path=PATH&state=!STATE";
 
-  constructor(private apiConfig: IApiConfig, private serverConfig: IServerConfig, mockData: IMockData) {
+  constructor(private apiConfig: IApiConfig, serverConfig: IServerConfig, mockData: IMockData) {
     this.env = serverConfig.env;
     this.debug = serverConfig.debug;
     this.protocol = serverConfig.protocol;

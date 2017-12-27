@@ -8,14 +8,15 @@ export const apiConfig: IApiConfig = {
   },
   post: {
     // SGV-BUILD-API-POST # NOT DELETE
+    fetchRecords: "apiHost:/fetchRecords",
     // 3.1	用户登录
     login: "bsm:/user/dologin", // ? sourceCode=&sourceUserId=&userName=&headUrl=&sex=&phone=&email=
     // 3.3	个人信息
     getUserInfo: "apiHost:/user/info", // ?token
   },
   get: {
-     // SGV-BUILD-API-GET # NOT DELETE
-     fetchMissionhallList: "promotor:/app/missionhall/list", // ?openId=ofq36s-R8ZnbZjZvhTa9sSWP-51k
+    // SGV-BUILD-API-GET # NOT DELETE
+    fetchMissionhallList: "promotor:/app/missionhall/list", // ?openId=ofq36s-R8ZnbZjZvhTa9sSWP-51k
   },
   serviceFactory: Services,
 };
