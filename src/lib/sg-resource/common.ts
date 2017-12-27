@@ -1,4 +1,4 @@
-import { Env, IApiConfig, IConfigAdapter, IHost, IServerConfig, ISite } from "./config";
+import { IConfigAdapter, IHost } from "./config";
 import { SGVFactory } from "./factory";
 
 export interface ICommon {

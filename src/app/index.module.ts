@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import * as VeeValidate from 'vee-validate';
 import routes from "./index.router";
 import { SGVFactory } from "../lib/sg-resource/index";
-import { apiConfig, serverConfig, mockData } from "./cofig/index";
+import { apiConfig, serverConfig, mockData } from "./config/index";
 
 Vue.use(VeeValidate);
 Vue.use(VueRouter);

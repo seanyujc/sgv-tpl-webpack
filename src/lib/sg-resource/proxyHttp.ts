@@ -1,8 +1,8 @@
 var MockAdapter = require('axios-mock-adapter');
-import Axios, { AxiosPromise, AxiosResponse } from "axios";
+import Axios, { AxiosResponse } from "axios";
 import * as qs from "qs";
-import { Common, ICommon } from "./common";
-import { Env, IApiConfig, IConfigAdapter, IHost, IMockData, IServerConfig, ISite } from "./config";
+import { ICommon } from "./common";
+import { IConfigAdapter, IMockData } from "./config";
 import { SGVFactory } from "./factory";
 
 export interface IProxyHttp {

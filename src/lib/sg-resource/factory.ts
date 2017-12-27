@@ -1,4 +1,4 @@
-import { Common, createCommon, ICommon, ICommonConstructor } from "./common";
+import { Common, createCommon, ICommon } from "./common";
 import { ConfigAdapter, createConfigAdapter, IMockData } from "./config";
 import { IApiConfig, IConfigAdapter, IServerConfig, ProxyHttp } from "./index";
 import { createProxyHttp, IProxyHttp } from "./proxyHttp";
