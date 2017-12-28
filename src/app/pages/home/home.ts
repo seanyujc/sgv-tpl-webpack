@@ -4,7 +4,6 @@ import Component from "vue-class-component";
 
 // console.log(styles);
 @Component({
-  template: require("./home.html"),
   // components: { HeaderBar },
   mounted: () => {
     // const file = new File([""], "file.txt");

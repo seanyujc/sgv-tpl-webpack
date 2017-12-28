@@ -1,14 +1,14 @@
 import Vue from "vue";
-import HeaderBar from "./components/headbar/headbar.vue";
+import Headbar from "./components/headbar/headbar.vue";
 
-const components = {
-  HeaderBar,
-};
+// const components = {
+//   HeaderBar,
+// };
 
 Vue
-  .component("HeaderBar", HeaderBar)
+  .component("headbar", Headbar)
   ;
 
-export default {
-  HeaderBar,
-};
+// export default {
+//   HeaderBar,
+// };

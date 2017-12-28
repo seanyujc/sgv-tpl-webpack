@@ -13,68 +13,88 @@ module.exports = {
 	},
 	module: {
 		rules: [{
-			test: /.tsx?$/,
-			include: [
-				path.resolve(__dirname, 'src')
-			],
-			exclude: [
-				path.resolve(__dirname, 'node_modules'),
-				path.resolve(__dirname, 'bower_components')
-			],
-			use: [{
-				loader: 'awesome-typescript-loader',
-				options: {
-					useBabel: true,
-					useCache: true
-				}
-			}]
-    },
-    {
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            // modules: true,
-            localIdentName: '[local]',
-          }
-        },
-        'sass-loader']
-    },
-    {
-      test: /\.html$/,
-      use: [
-        'raw-loader'
-      ]
-    },]
+				test: /.tsx?$/,
+				include: [
+					path.resolve(__dirname, 'src')
+				],
+				exclude: [
+					path.resolve(__dirname, 'node_modules'),
+					path.resolve(__dirname, 'bower_components')
+				],
+				use: [{
+					loader: 'awesome-typescript-loader',
+					options: {
+						useBabel: true,
+						useCache: true
+					}
+				}]
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					'style-loader',
+					{
+						loader: 'css-loader',
+						options: {
+							// modules: true,
+							localIdentName: '[local]',
+						}
+					},
+					'sass-loader'
+				]
+			},
+			{
+				test: /\.html$/,
+				use: [
+					'raw-loader'
+				]
+			},
+			{
+				test: /\.vue$/,
+				use: [{
+					loader: 'vue-loader',
+					options: {
+						loaders: {
+							ts: [{
+								loader: 'awesome-typescript-loader',
+								options: {
+									useBabel: true,
+									useCache: true,
+								}
+							}]
+						},
+						esModule: true
+					}
+				}]
+			},
+		]
 	},
 	resolve: {
-    extensions: ['.js', '.json', '.ts', '.tsx', '.scss'],
-    alias: {
-      'vue': 'vue/dist/vue.js'
-    }
+		extensions: ['.js', '.json', '.ts', '.tsx', '.scss'],
+		alias: {
+			'vue': 'vue/dist/vue.js'
+		}
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: path.resolve(__dirname, 'src/app/index.html')
-    }),
-    new webpack.DefinePlugin({
-      'NODE_ENV': JSON.stringify(NODE_ENV),
-      'PUBLIC_PATH': JSON.stringify(config.dev.assetsPublicPath),
-      'SITE_INFO': JSON.stringify(config.build.siteInfo)
-    })
+		}),
+		new webpack.DefinePlugin({
+			'NODE_ENV': JSON.stringify(NODE_ENV),
+			'PUBLIC_PATH': JSON.stringify(config.dev.assetsPublicPath),
+			'SITE_INFO': JSON.stringify(config.build.siteInfo)
+		})
 	],
-  devtool: 'source-map',
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 9000
-  }
+	devtool: 'source-map',
+	devServer: {
+		contentBase: path.join(__dirname, "dist"),
+		compress: true,
+		port: 9000
+	}
 	// devServer: {
-  //   hot: true,
-  //   contentBase: path.join(__dirname, "dist"),
-  //   publicPath: path.join('/'),
-  //   host: "0.0.0.0",
+	//   hot: true,
+	//   contentBase: path.join(__dirname, "dist"),
+	//   publicPath: path.join('/'),
+	//   host: "0.0.0.0",
 	// }
 };
