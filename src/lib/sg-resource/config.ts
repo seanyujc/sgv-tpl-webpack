@@ -126,17 +126,19 @@ export class ConfigAdapter implements IConfigAdapter {
     this.successCode = serverConfig.successCode;
     this.isMock = serverConfig.isMock;
     this.mockData = mockData;
-    this.curSite = !!serverConfig.sites ? serverConfig.sites[this.env] : { local: window.location.host, remote: window.location.host };
+    this.curSite = !!serverConfig.sites ? serverConfig.sites[this.env]
+      : { local: window.location.host, remote: window.location.host };
     this.domain = this.curSite.remote;
     this.localSite = this.protocol + "//" + this.curSite.local + serverConfig.publicPath;
     this.entrance = !!serverConfig.wXOAuth && !!this.curSite.appID ?
-      this.protocol + this.URL_TPL.replace(/\{DOMAIN}/, this.curSite.remote).replace(/\{HOST_API}/, serverConfig.wXOAuth)
+      this.protocol + this.URL_TPL.replace(/\{DOMAIN}/, this.curSite.remote)
+        .replace(/\{HOST_API}/, serverConfig.wXOAuth)
         .replace("APPID", this.curSite.appID) : "";
     this.jsSignUrl = !!serverConfig.wXJsSign ? "//" + this.curSite.remote + serverConfig.wXJsSign : undefined;
     this.jsApiList = serverConfig.jsApiList;
   }
 
-  getApi(method: string, apiName: string): string {
+  public getApi(method: string, apiName: string): string {
     if (this.apiConfig[method] && this.apiConfig[method][apiName]) {
       return this.apiConfig[method][apiName];
     }

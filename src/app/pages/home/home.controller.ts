@@ -14,9 +14,9 @@ import Component from "vue-class-component";
 })
 export default class HomePage extends Vue {
 
-  title: string = "Home";
+  private title: string = "Home";
 
-  show() {
+  public show() {
     alert(this.title);
   }
 

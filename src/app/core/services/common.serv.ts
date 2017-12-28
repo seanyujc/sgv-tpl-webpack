@@ -1,7 +1,8 @@
 import { BaseService } from "./base.serv";
 
 export interface ICommonService {
-
+  // SGV-BUILD-SERVICE-INTERFACE # NOT DELETE
+  getLocalDomain(): string;
 }
 
 interface ICommonServiceConstructor {
@@ -15,5 +16,9 @@ export function createCommonService(ctor: ICommonServiceConstructor): ICommonSer
 export class CommonService extends BaseService implements ICommonService {
   constructor() {
     super();
+  }
+  // SGV-BUILD-SERVICE-FUNCTION # NOT DELETE
+  public getLocalDomain(): string {
+    return "";
   }
 }

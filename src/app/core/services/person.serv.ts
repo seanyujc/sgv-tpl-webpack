@@ -19,10 +19,10 @@ export class PersonService extends BaseService implements IPersonService {
     super();
   }
   // SGV-BUILD-SERVICE-FUNCTION # NOT DELETE
-  fetchRecords(arg: string): Promise<any> {
+  public fetchRecords(arg: string): Promise<any> {
     return this.proxyHttp.post("fetchRecords", {arg});
   }
-  getUserInfo(arg: any): Promise<any> {
+  public getUserInfo(arg: any): Promise<any> {
     return this.proxyHttp.post("getUserInfo", {arg});
   }
 }

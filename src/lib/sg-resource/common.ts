@@ -38,7 +38,7 @@ export class Common implements ICommon {
     // this.isShowModal = false;
   }
 
-  dealPath(apiKey = "", method = "GET"): string {
+  public dealPath(apiKey = "", method = "GET"): string {
     let api = "";
     let url = apiKey;
     method = method.toLocaleLowerCase();
@@ -58,11 +58,11 @@ export class Common implements ICommon {
     return url;
   }
 
-  trim(s: string): string {
+  public trim(s: string): string {
     return s.replace(/(^\s*)|(\s*$)/g, "");
   }
 
-  upperFirst(str: string) {
+  public upperFirst(str: string) {
     const first = str.substr(0, 1).toLocaleUpperCase();
     const surplus = str.substr(1, str.length);
     return first + surplus;

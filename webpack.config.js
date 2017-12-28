@@ -65,8 +65,16 @@ module.exports = {
       'SITE_INFO': JSON.stringify(config.build.siteInfo)
     })
 	],
-	devtool: 'source-map',
-	devServer: {
-		publicPath: path.join('/')
-	}
+  devtool: 'source-map',
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    port: 9000
+  }
+	// devServer: {
+  //   hot: true,
+  //   contentBase: path.join(__dirname, "dist"),
+  //   publicPath: path.join('/'),
+  //   host: "0.0.0.0",
+	// }
 };

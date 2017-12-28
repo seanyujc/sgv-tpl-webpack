@@ -8,6 +8,7 @@ export const apiConfig: IApiConfig = {
   },
   post: {
     // SGV-BUILD-API-POST # NOT DELETE
+    getLocalDomain: "apiHost:/getLocalDomain",
     fetchRecords: "apiHost:/fetchRecords",
     // 3.1	用户登录
     login: "bsm:/user/dologin", // ? sourceCode=&sourceUserId=&userName=&headUrl=&sex=&phone=&email=

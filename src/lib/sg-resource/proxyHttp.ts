@@ -1,4 +1,5 @@
-var MockAdapter = require('axios-mock-adapter');
+// tslint:disable-next-line:no-var-requires
+const MockAdapter = require("axios-mock-adapter");
 import Axios, { AxiosResponse } from "axios";
 import * as qs from "qs";
 import { ICommon } from "./common";
@@ -42,19 +43,19 @@ export class ProxyHttp implements IProxyHttp {
     }
   }
 
-  get<T, K>(api: string, params: K): Promise<T> {
+  public get<T, K>(api: string, params: K): Promise<T> {
     const url = this.common.dealPath(api, "GET");
     return Axios.get(url, { params })
       .then<T>(this.fulfilled);
   }
-  post<T, K>(api: string, data: K): Promise<T> {
+  public post<T, K>(api: string, data: K): Promise<T> {
     const url = this.common.dealPath(api, "POST");
     return Axios.post(url, qs.stringify(data),
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       }).then<T>(this.fulfilled);
   }
-  form<T>(api: string, form: FormData): Promise<T> {
+  public form<T>(api: string, form: FormData): Promise<T> {
     const url = this.common.dealPath(api, "POST");
     return Axios.post(url, form,
       {

@@ -4,17 +4,17 @@ import { IApiConfig, IConfigAdapter, IServerConfig, ProxyHttp } from "./index";
 import { createProxyHttp, IProxyHttp } from "./proxyHttp";
 
 export abstract class SGVFactory {
-  static common: ICommon;
-  static proxyHttp: IProxyHttp;
-  static configAdapter: IConfigAdapter;
+  public static common: ICommon;
+  public static proxyHttp: IProxyHttp;
+  public static configAdapter: IConfigAdapter;
 
   /**
-   * 谁使用谁传参创建
+   * 使用时传参创建
    * @param apiConfig api配置
    * @param serverConfig 服务器配置
    * @param mockData 模拟数据配置
    */
-  static createConfigAdapter(apiConfig?: IApiConfig, serverConfig?: IServerConfig, mockData?: IMockData) {
+  public static createConfigAdapter(apiConfig?: IApiConfig, serverConfig?: IServerConfig, mockData?: IMockData) {
     if (!this.configAdapter) {
       if (!!apiConfig && !!serverConfig && !!mockData) {
         this.configAdapter = createConfigAdapter(ConfigAdapter, apiConfig, serverConfig, mockData);
@@ -25,14 +25,14 @@ export abstract class SGVFactory {
     return this.configAdapter;
   }
 
-  static createProxyHttp(): IProxyHttp {
+  public static createProxyHttp(): IProxyHttp {
     if (!this.proxyHttp) {
       this.proxyHttp = createProxyHttp(ProxyHttp);
     }
     return this.proxyHttp;
   }
 
-  static createCommon() {
+  public static createCommon() {
     if (!this.common) {
       this.common = createCommon(Common);
     }
