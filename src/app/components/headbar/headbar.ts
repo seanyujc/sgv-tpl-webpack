@@ -3,5 +3,5 @@ import Component from "vue-class-component";
 
 @Component
 export default class Headbar extends Vue { 
-  title:string = 'xxx';
+  title:string = 'Hello1';
 }

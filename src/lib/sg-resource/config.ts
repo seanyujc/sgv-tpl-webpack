@@ -78,7 +78,7 @@ export interface IConfigAdapter {
   readonly successCode: string;
   readonly isMock?: boolean;
   readonly mockData: IMockData;
-  readonly curSite: ISite;
+  // readonly curSite: ISite;
   readonly domain: string;
   readonly localSite: string;
   readonly entrance: string;
@@ -107,7 +107,7 @@ export class ConfigAdapter implements IConfigAdapter {
   successCode: string;
   isMock?: boolean;
   mockData: IMockData;
-  curSite: ISite;
+  private curSite: ISite;
   domain: string;
   localSite: string;
   entrance: string;

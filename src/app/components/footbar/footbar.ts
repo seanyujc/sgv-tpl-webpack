@@ -13,11 +13,11 @@ import { ICommonService } from "../../core/services/common.serv";
     console.log(file);
   },
 })
-export default class HomePage extends Vue {
+export default class FootbarPage extends Vue {
   @AutowiredService
   private commonService: ICommonService;
   
-  private title: string = "Home";
+  private title: string = "Footbar";
 
   public show() {
     alert(this.commonService.getLocalDomain());

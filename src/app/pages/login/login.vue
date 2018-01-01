@@ -1,12 +1,11 @@
 <template>
   <div class="page-module">
-    <headbar></headbar>
     {{title}}
     <p>{{tomorrow}}</p>
     <button type="button" @click="show()">按钮</button>
   </div>
 </template>
-<script lang="ts" src="./home.ts">
+<script lang="ts" src="./login.ts">
 
 </script>
 <style lang="scss" scoped>

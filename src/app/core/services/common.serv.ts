@@ -19,6 +19,6 @@ export class CommonService extends BaseService implements ICommonService {
   }
   // SGV-BUILD-SERVICE-FUNCTION # NOT DELETE
   public getLocalDomain(): string {
-    return "";
+    return this.configAdapter.localSite;
   }
 }
