@@ -2,10 +2,10 @@
   <div class="page-module">
     {{title}}
     <p>{{tomorrow}}</p>
-    <button type="button" @click="show()">按钮1</button>
+    <button type="button" @click="show()">按钮</button>
   </div>
 </template>
-<script lang="ts" src="./footbar.ts">
+<script lang="ts" src="./calandar.ts">
 
 </script>
 <style lang="scss" scoped>

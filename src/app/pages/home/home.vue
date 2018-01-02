@@ -1,9 +1,10 @@
 <template>
   <div class="page-module">
     <headbar></headbar>
-    {{title}}
     <p>{{tomorrow}}</p>
     <button type="button" @click="show()">按钮</button>
+    <calandar></calandar>
+    <footbar></footbar>
   </div>
 </template>
 <script lang="ts" src="./home.ts">

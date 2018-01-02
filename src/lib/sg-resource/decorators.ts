@@ -1,10 +1,8 @@
 import "reflect-metadata";
 import { SGVFactory } from "./factory";
 
-const common = SGVFactory.createCommon();
 
 export function AutowiredService(target: any, key: string) {
-
   const t = Reflect.getMetadata("design:type", target, key);
   if (t.name === "Object") {
     const configAdapter = SGVFactory.createConfigAdapter();
@@ -38,5 +36,6 @@ export function AutowiredService(target: any, key: string) {
 // }
 
 function getMethodName(key: string) {
+  const common = SGVFactory.createCommon();
   return "create" + common.upperFirst(key);
 }

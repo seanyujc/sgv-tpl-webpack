@@ -39,4 +39,15 @@ export abstract class SGVFactory {
     return this.common;
   }
 
+  public static createVuePlugin() {
+    return {
+      install: (Vue: any, options: any) => {
+        this.createConfigAdapter(options.apiConfig, options.serverConfig, options.mockData);
+        Vue.myGlobalMethod = function () {
+          // 逻辑...
+        }
+      }
+    }
+  }
+
 }
