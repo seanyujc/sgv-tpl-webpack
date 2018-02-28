@@ -5,7 +5,7 @@ export const enum Env {
   DEV = 1,
   TEST,
   UAT,
-  PRO,
+  PROD,
 }
 
 /**
@@ -55,11 +55,12 @@ export interface IMockData {
  * 服务器配置对象
  */
 export interface IServerConfig {
+  appKey: string[];
   env: Env;
   debug: boolean;
   protocol: string;
   publicPath: string;
-  sites: ISites | void;
+  sites: ISites;
   successCode: string;
   successCallback?: <T>(res: T, resolve: T | PromiseLike<T> | undefined, reject: any) => void;
   failCallback?: <T>(res: T, reject: any) => void;
@@ -107,7 +108,6 @@ export class ConfigAdapter implements IConfigAdapter {
   successCode: string;
   isMock?: boolean;
   mockData: IMockData;
-  private curSite: ISite;
   domain: string;
   localSite: string;
   entrance: string;
@@ -115,6 +115,7 @@ export class ConfigAdapter implements IConfigAdapter {
   jsSignUrl?: string;
   jsApiList?: string[] | undefined;
 
+  private curSite: ISite;
   private URL_TPL = "//{DOMAIN}{HOST_API}?appId=APPID&path=PATH&state=!STATE";
 
   constructor(private apiConfig: IApiConfig, serverConfig: IServerConfig, mockData: IMockData) {
@@ -143,5 +144,9 @@ export class ConfigAdapter implements IConfigAdapter {
       return this.apiConfig[method][apiName];
     }
     return "";
+  }
+
+  get token() {
+    return "d2a57dc1d883fd21fb9951699df71cc7";
   }
 }

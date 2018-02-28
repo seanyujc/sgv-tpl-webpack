@@ -5,25 +5,10 @@ import { ICommonService } from "../../core/services/common.serv";
 
 // console.log(styles);
 @Component({
-  // components: { HeaderBar },
-  mounted: () => {
-    // const file = new File([""], "file.txt");
-    const file: any = document.getElementById("file");
-    console.log(file);
-  },
+  components: {},
 })
 export default class FootbarPage extends Vue {
-  @AutowiredService
-  private commonService: ICommonService;
-  
-  private title: string = "Footbar";
 
-  public show() {
-    alert(this.commonService.getLocalDomain());
-  }
-
-  get tomorrow() {
-    return new Date();
-  }
+  title: string = "Footbar";
 
 }

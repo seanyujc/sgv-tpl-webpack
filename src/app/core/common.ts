@@ -13,21 +13,18 @@ export default class Common {
     let env = Env.DEV;
     if (NODE_ENV === "TEST") {
       env = Env.TEST;
-    } else if (NODE_ENV === "PRO") {
-      env = Env.PRO;
+    } else if (NODE_ENV === "PROD") {
+      env = Env.PROD;
     }
     return env;
   }
-  static getSiteInfo(): ISites | void {
+  static getSiteInfo(): ISites {
     const siteInfo: any = SITE_INFO;
-    if (!siteInfo) {
-      return;
-    }
     const o: any = {};
     o[Env.DEV] = siteInfo.DEV;
     o[Env.TEST] = siteInfo.TEST;
     o[Env.UAT] = siteInfo.UAT;
-    o[Env.PRO] = siteInfo.PRO;
+    o[Env.PROD] = siteInfo.PROD;
     return o;
   }
   /**
@@ -57,5 +54,19 @@ export default class Common {
     const left = items.slice(0, middle);
     const right = items.slice(middle);
     return this.merge(this.mergeSort(left), this.mergeSort(right));
+  }
+
+  /**
+   * 判断手机的基本类型
+   */
+  static ismobile() {
+    const u = navigator.userAgent;
+    if (u.indexOf("Android") > -1 || u.indexOf("Linux") > -1) {
+      return 1;
+    } else if (u.indexOf("iPhone") > -1) {
+      return 0;
+    } else if (u.indexOf("Windows Phone") > -1) {
+      return -1;
+    }
   }
 }

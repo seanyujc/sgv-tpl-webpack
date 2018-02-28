@@ -3,7 +3,7 @@
     <headbar></headbar>
     <p>{{tomorrow}}</p>
     <button type="button" @click="show()">按钮</button>
-    <calandar></calandar>
+    <router-link to="/foo">登录</router-link>
     <footbar></footbar>
   </div>
 </template>

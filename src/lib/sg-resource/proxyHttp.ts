@@ -66,7 +66,7 @@ export class ProxyHttp implements IProxyHttp {
   private fulfilled = <T>(res: AxiosResponse) => {
     const promise = new Promise<T>((resolve, reject) => {
       if (res.data.hasOwnProperty("code") && String(res.data.code) === this.configAdapter.successCode) {
-        resolve(res.data);
+        resolve(res.data.data);
       } else {
         reject(res.data);
       }
@@ -84,7 +84,11 @@ export class ProxyHttp implements IProxyHttp {
     // tslint:disable-next-line:forin
     for (const key in mockData.post) {
       const url = this.common.dealPath(key, "POST");
-      mock.onPost(url).reply(200, mockData.post[key]);
+      if (typeof mockData.post[key] === "function") {
+        mock.onPost(url).reply(mockData.post[key]);
+      } else {
+        mock.onPost(url).reply(200, mockData.post[key]);
+      }
     }
     mock.onPost().reply(404);
   }

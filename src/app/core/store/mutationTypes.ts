@@ -1,0 +1,6 @@
+export const SET_HAS_HEADBAR = "SET_HAS_HEADBAR";
+export const SET_HAS_C_SERVICE = "SET_HAS_C_SERVICE";
+export const SET_HAS_CANLENDAR = "SET_HAS_CANLENDAR";
+export const SET_CUSTOM_BUTTON = "SET_CUSTOM_BUTTON";
+export const SET_JUMP_APP = "SET_JUMP_APP";
+export const SET_TITLE = "SET_TITLE";

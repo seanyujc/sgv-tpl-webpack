@@ -1,18 +1,18 @@
 <template>
   <div class="page-module">
     {{title}}
-    <p>{{tomorrow}}</p>
+    <p>{{today}}</p>
     <button type="button" @click="show()">按钮</button>
   </div>
 </template>
-<script lang="ts" src="./login.ts">
+<script lang="ts" src="./foo.ts">
 
 </script>
 <style lang="scss" scoped>
-$color-red: #f00;
+$color: #333;
 
 .page-module {
-  color: $color-red;
+  color: $color;
   font-size: 0.6rem;
 }
 </style>

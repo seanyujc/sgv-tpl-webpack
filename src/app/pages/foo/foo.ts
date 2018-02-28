@@ -4,30 +4,30 @@ import { AutowiredService } from "../../../lib/sg-resource/decorators";
 import { ICommonService } from "../../core/services/common.serv";
 import BasePage from "../BasePage";
 
-interface IHomePage {
+interface IFooPage {
   /** 通用服务 */
   commonService: ICommonService;
 }
 
-// console.log(styles);
 @Component({
+  name: "foo",
   components: {},
 })
-export default class HomePage extends BasePage implements IHomePage {
+export default class FooPage extends BasePage implements IFooPage {
+
   @AutowiredService
   commonService: ICommonService;
 
-  title: string = "Home";
+  title: string = "Foo";
+
+  get today() {
+    return new Date();
+  }
 
   show() {
     alert(this.commonService.getLocalDomain());
   }
 
-  get tomorrow() {
-    return new Date();
-  }
-
-  // 生命钩子
   mounted() {
     //
   }

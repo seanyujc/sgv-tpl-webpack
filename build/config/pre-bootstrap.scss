@@ -1,0 +1,69 @@
+//** Background color for `<body>`.
+$body-bg:               #f4f6fa !default;
+$screen-sm: 7.50rem !default;
+$modal-md: 7.50rem !default;
+$btn-primary-bg: #007aff;
+$link-color: #3765bd;
+$state-danger-text: #f73b3c;
+$input-border: #cfcfcf;
+$border-radius-base: .02rem;
+$font-size-base: .26rem !default;
+$padding-base-vertical:     .12rem !default;
+
+$padding-base-horizontal:   .24rem !default;
+
+$padding-large-vertical:    .2rem !default;
+$padding-large-horizontal:  .32rem !default;
+
+$padding-small-vertical:    .10rem !default;
+$padding-small-horizontal:  .2rem !default;
+
+$padding-xs-vertical:       .02rem !default;
+$padding-xs-horizontal:     .1rem !default;
+
+$border-radius-base:        .08rem !default;
+$border-radius-large:       .12rem !default;
+$border-radius-small:       .06rem !default;
+
+//** Width of the `border` for generating carets that indicate dropdowns.
+$caret-width-base:          .08rem !default;
+//** Carets increase slightly in size for larger components.
+$caret-width-large:         .1rem !default;
+
+//** Padding for `<th>`s and `<td>`s.
+$table-cell-padding:            .16rem !default;
+//** Padding for cells in `.table-condensed`.
+$table-condensed-cell-padding:  .1rem !default;
+
+//** `.form-group` margin
+$form-group-margin-bottom:       .3rem !default;
+
+//** Deprecated `$screen-xs` as of v3.0.1
+$screen-xs:                  4.80rem !default;
+
+//** Deprecated `$screen-sm` as of v3.0.1
+$screen-sm:                  7.50rem !default;
+
+//** Deprecated `$screen-md` as of v3.0.1
+$screen-md:                  9.92rem !default;
+
+//** Deprecated `$screen-lg` as of v3.0.1
+$screen-lg:                  12.00rem !default;
+
+//** Padding between columns. Gets divided in half for the left and right.
+$grid-gutter-width:         .6rem !default;
+
+// Small screen / tablet
+$container-tablet:             (7.20rem + $grid-gutter-width) !default;
+
+$navbar-height:                    1rem !default;
+$navbar-collapse-max-height:       6.80rem !default;
+$nav-link-padding:                          .20rem .3rem !default;
+
+// Small screen / tablet
+$container-tablet:             (7.20rem + $grid-gutter-width) !default;
+// Medium screen / desktop
+$container-desktop:            (9.40rem + $grid-gutter-width) !default;
+// Large screen / wide desktop
+$container-large-desktop:      (11.40rem + $grid-gutter-width) !default;
+

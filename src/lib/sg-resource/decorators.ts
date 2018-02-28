@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { SGVFactory } from "./factory";
 
-
 export function AutowiredService(target: any, key: string) {
   const t = Reflect.getMetadata("design:type", target, key);
   if (t.name === "Object") {
