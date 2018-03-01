@@ -18,6 +18,7 @@
     "prebuild:dll": "rimraf dll",
     "build:dll": "webpack -p --config ./build/webpack.dll.js",
     "postbuild:dll": "npm run cpdll",
+    "postinstall": "npm run prebuild && npm run build:dll",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

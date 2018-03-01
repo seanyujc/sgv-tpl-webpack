@@ -11,7 +11,7 @@ export function AutowiredService(target: any, key: string) {
   // property getter
   const getter = () => {
     if (service) {
-      return service().bind(configAdapter.serviceFactory);
+      return service.bind(configAdapter.serviceFactory)();
     } else {
       return () => {
         return null;

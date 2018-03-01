@@ -2,6 +2,11 @@ body{
   margin: 0;
 }
 
+// 有头部修复
+.has-headbar .page-module {
+  border-top: .84rem solid transparent;
+}
+
 // 转页动画
 .slide-left-enter-active,
 .slide-left-leave-active,

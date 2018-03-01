@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Component from "vue-class-component";
+import Scroller from "vux/src/components/scroller/index.vue";
 import { AutowiredService } from "../../../lib/sg-resource/decorators";
 import { ICommonService } from "../../core/services/common.serv";
 import BasePage from "../BasePage";
@@ -11,7 +12,9 @@ interface IFooPage {
 
 @Component({
   name: "foo",
-  components: {},
+  components: {
+    Scroller,
+  },
 })
 export default class FooPage extends BasePage implements IFooPage {
   @AutowiredService
