@@ -2,9 +2,7 @@
   <div class="page-module">
     <scroller :lock-x="true" :height="'-'+ headbarHeightPX" ref="Scroller">
       <div>
-        {{title}}
-        <p>{{today}}</p>
-        <button type="button" @click="show()">按钮</button>
+        <p v-for="i in 80">placeholder {{i}}</p>
       </div>
     </scroller>
   </div>
