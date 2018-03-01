@@ -16,6 +16,6 @@ $color: #333;
 
 .page-module {
   color: $color;
-  font-size: 0.6rem;
+  font-size: 0.3rem;
 }
 </style>
