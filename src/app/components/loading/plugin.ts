@@ -30,17 +30,17 @@ const plugin = {
         $vm.isLoading = false;
       },
     };
-    if (!vue.$lbn) {
-      vue.$lbn = {
+    if (!vue.$sg) {
+      vue.$sg = {
         loading,
       };
     } else {
-      vue.$lbn.loading = loading;
+      vue.$sg.loading = loading;
     }
     // 注入组件
     vue.mixin({
       created() {
-        this.$lbn = vue.$lbn;
+        this.$sg = vue.$sg;
       },
     });
   },

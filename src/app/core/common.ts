@@ -69,4 +69,23 @@ export default class Common {
       return -1;
     }
   }
+
+  /**
+   * 跳转到原生app的方法
+   * @param obj 传递参数的对象
+   */
+  public static goToActivity(obj: { pageType?: string, params?: any }) {
+    const data: { pageType?: string, params?: any } = {};
+    data.pageType = obj.pageType ? obj.pageType : "web";
+    data.params = obj.params ? obj.params : {};
+    const dataStr = JSON.stringify(data);
+    const phoneType = this.ismobile();
+    let callBack: any;
+    if (phoneType === 1) {
+      callBack = (window as any).android.gotoActivity(dataStr);
+    } else if (phoneType === 0) {
+      callBack = (window as any).gotoActivity(dataStr);
+    }
+    return callBack;
+  }
 }

@@ -47,17 +47,17 @@ const plugin = {
         });
       },
     };
-    if (!vue.$lbn) {
-      vue.$lbn = {
+    if (!vue.$sg) {
+      vue.$sg = {
         dialog,
       };
     } else {
-      vue.$lbn.lbnDialog = dialog;
+      vue.$sg.dialog = dialog;
     }
     // 注入组件
     vue.mixin({
       created() {
-        this.$lbn = vue.$lbn;
+        this.$sg = vue.$sg;
       },
     });
   },

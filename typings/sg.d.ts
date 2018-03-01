@@ -3,7 +3,7 @@ export interface ISG {
     show: (options?: { delay: number }) => void;
     hide: () => void;
   };
-  lbnDialog: {
+  dialog: {
     dialog(msg?: string): void;
     conformDialog<T>(mag?: string): Promise<T>;
   };

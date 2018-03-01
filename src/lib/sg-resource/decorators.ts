@@ -3,26 +3,32 @@ import { SGVFactory } from "./factory";
 
 export function AutowiredService(target: any, key: string) {
   const t = Reflect.getMetadata("design:type", target, key);
-  if (t.name === "Object") {
-    const configAdapter = SGVFactory.createConfigAdapter();
-    const service = configAdapter.serviceFactory[getMethodName(key)].bind(configAdapter.serviceFactory);
-    // property value
+  // if (t.name === "Object") {
+  const configAdapter = SGVFactory.createConfigAdapter();
+  const service = configAdapter.serviceFactory[getMethodName(key)];
+  // property value
 
-    // property getter
-    const getter = () => {
-      return service();
-    };
-
-    // return Reflect.metadata("_" + key, service());
-    if (delete target[key]) {
-      Object.defineProperty(target, key, {
-        get: getter,
-        set: undefined,
-        enumerable: true,
-        configurable: true,
-      });
+  // property getter
+  const getter = () => {
+    if (service) {
+      return service().bind(configAdapter.serviceFactory);
+    } else {
+      return () => {
+        return null;
+      };
     }
+  };
+
+  // return Reflect.metadata("_" + key, service());
+  if (delete target[key]) {
+    Object.defineProperty(target, key, {
+      get: getter,
+      set: undefined,
+      enumerable: true,
+      configurable: true,
+    });
   }
+  // }
 }
 
 // export function ServiceInjection(serviceName: string) {

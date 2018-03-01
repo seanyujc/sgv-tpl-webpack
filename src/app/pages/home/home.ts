@@ -20,7 +20,7 @@ export default class HomePage extends BasePage implements IHomePage {
   title: string = "Home";
 
   show() {
-    alert(this.commonService.getLocalDomain());
+    this.$sg.dialog.conformDialog("haha");
   }
 
   get tomorrow() {

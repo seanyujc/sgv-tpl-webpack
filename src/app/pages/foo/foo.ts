@@ -14,7 +14,6 @@ interface IFooPage {
   components: {},
 })
 export default class FooPage extends BasePage implements IFooPage {
-
   @AutowiredService
   commonService: ICommonService;
 

@@ -5,7 +5,9 @@
       <div class="diglog-bg" v-if="isShowConform">
         <div class="conform-dialog">
           <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-          <p>{{conformMsg}}</p>
+          <section>
+            <p>{{conformMsg}}</p>
+          </section>
           <button @click="conformBtn()">{{options.okText}}</button>
           <button class="cancel" @click="cancelBtn()">{{options.cancelText}}</button>
         </div>
@@ -16,7 +18,7 @@
 <script lang="ts" src="./dialog.ts">
 </script>
 <style lang="scss">
-.comp-module .weui-dialog{
+.comp-module .weui-dialog {
   width: auto;
   max-width: 6.2rem;
 }
@@ -46,12 +48,16 @@
     .conform-dialog {
       width: 6.2rem;
       height: 4.5rem;
-      padding: 2.1rem 0.2rem 0.2rem 0.2rem;
+      padding: 0.6rem 0.2rem 0.2rem 0.2rem;
       // background: url(../../styles/images/dialog.png) #fff no-repeat center
       //   0.6rem;
       background-size: 0.8rem 0.8rem;
-      p {
-        margin-bottom: 0.9rem;
+      .glyphicon {
+        font-size: 1.5rem;
+        color: #4285f4;
+      }
+      section {
+        height: 1.08rem;
         text-align: center;
       }
       button {
