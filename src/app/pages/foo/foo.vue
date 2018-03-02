@@ -1,8 +1,8 @@
 <template>
   <div class="page-module">
-    <scroller :lock-x="true" :height="'-'+ headbarHeightPX" ref="Scroller">
+    <scroller :lock-x="true" :height="'-'+ headbarHeightPX" ref="xScroller" :use-pulldown="true" :use-pullup="true" :pulldown-config="PULLDOWN_CONFIG" :pullup-config="PULLUP_CONFIG" @on-pulldown-loading="pullDonwRefresh" @on-pullup-loading="pullUpLoad">
       <div>
-        <p v-for="i in 80">placeholder {{i}}</p>
+        <p v-for="i in 80" :key="i">placeholder {{i}}</p>
       </div>
     </scroller>
   </div>

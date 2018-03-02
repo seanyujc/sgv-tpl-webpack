@@ -11,7 +11,7 @@ export interface IWithScrollerPage {
   PULLUP_CONFIG: any;
 
   /** 下拉刷新方法 */
-  pullDonwRefresh: () => void;
+  pullDonwRefresh(): void;
   /** 上拉加载 */
-  pullUpLoad: () => void;
+  pullUpLoad(): void;
 }
