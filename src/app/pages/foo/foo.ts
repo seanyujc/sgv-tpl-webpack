@@ -49,5 +49,13 @@ export default class FooPage extends BasePage implements IFooPage, IWithScroller
 
   mounted() {
     //
+    const item2 = document.getElementById("item2");
+    setTimeout(() => {
+      if (item2) {
+        item2.style.top = "4rem";
+        item2.style.left = "4rem";
+      }
+    }, 1000);
+
   }
 }

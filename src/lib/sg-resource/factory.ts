@@ -43,11 +43,11 @@ export abstract class SGVFactory {
     return {
       install: (Vue: any, options: any) => {
         this.createConfigAdapter(options.apiConfig, options.serverConfig, options.mockData);
-        Vue.myGlobalMethod = function () {
+        Vue.myGlobalMethod = () => {
           // 逻辑...
-        }
-      }
-    }
+        };
+      },
+    };
   }
 
 }
