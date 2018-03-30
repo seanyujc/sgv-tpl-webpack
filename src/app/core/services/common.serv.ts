@@ -1,4 +1,5 @@
 import { BaseService } from "./base.serv";
+import Common from "../common";
 
 export interface ICommonService {
   // SGV-BUILD-SERVICE-INTERFACE # NOT DELETE

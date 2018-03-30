@@ -13,8 +13,24 @@ const router = new VueRouter({
   routes,
 });
 const history: Storage = window.sessionStorage;
+history.clear();
 let historyCount = +(history.getItem("count") || 0);
 history.setItem("/", "0");
+
+let isPush = false;
+let endTime = Date.now();
+const methods = ["push", "go", "replace", "forward", "back"];
+document.addEventListener("touchend", () => {
+  endTime = Date.now();
+});
+methods.forEach((key) => {
+  const method = (router as any)[key].bind(router);
+  // tslint:disable-next-line:only-arrow-functions
+  (router as any)[key] = function (...args: any[]) {
+    isPush = true;
+    method.apply(null, args);
+  };
+});
 
 const app: Vue = new Vue({
   router,
@@ -38,26 +54,40 @@ const app: Vue = new Vue({
 }).$mount("#app");
 
 router.onReady(() => {
-  if (!history.getItem(router.currentRoute.path)) {
+  const key = router.currentRoute.path.match(/\/\w+/);
+  if (key && !history.getItem(key[0])) {
     ++historyCount;
     history.setItem("count", historyCount.toString());
-    if (router.currentRoute.path !== "/") { history.setItem(router.currentRoute.path, historyCount.toString()); }
+    if (key[0] !== "/") { history.setItem(key[0], historyCount.toString()); }
   }
 });
 
 router.beforeEach((to, from, next) => {
-  const toIndex = history.getItem(to.path);
-  const fromIndex = history.getItem(from.path);
+  const toKey = to.path.match(/\/\w+/);
+  const fromKey = from.path.match(/\/\w+/);
+  if (!toKey || !fromKey) {
+    return;
+  }
+  const toIndex = history.getItem(toKey[0]);
+  const fromIndex = history.getItem(fromKey[0]);
   if (toIndex) {
     if (!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === "0" && fromIndex === "0")) {
-      app.$data.transitionName = "slide-left";
+      if (!isPush && (Date.now() - endTime) < 377) {
+        app.$data.transitionName = "";
+      } else {
+        app.$data.transitionName = "slide-left";
+      }
     } else {
-      app.$data.transitionName = "slide-right";
+      if (!isPush && (Date.now() - endTime) < 377) {
+        app.$data.transitionName = "";
+      } else {
+        app.$data.transitionName = "slide-right";
+      }
     }
   } else {
     ++historyCount;
     history.setItem("count", historyCount.toString());
-    if (to.path !== "/") { history.setItem(to.path, historyCount.toString()); }
+    if ( toKey[0] !== "/") { history.setItem(toKey[0], historyCount.toString()); }
     app.$data.transitionName = "slide-left";
   }
 

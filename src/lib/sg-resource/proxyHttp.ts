@@ -1,6 +1,6 @@
 // tslint:disable-next-line:no-var-requires
 const MockAdapter = require("axios-mock-adapter");
-import Axios, { AxiosResponse } from "axios";
+import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import * as qs from "qs";
 import { ICommon } from "./common";
 import { IConfigAdapter, IMockData } from "./config";
@@ -18,7 +18,7 @@ export interface IProxyHttp {
    * @param api config定义的接口
    * @param params 请求参数
    */
-  post<T, K>(api: string, params: K): Promise<T>;
+  post<T, K>(api: string, params: K, config?: AxiosRequestConfig | undefined): Promise<T>;
   form<T>(api: string, form: FormData): Promise<T>;
 }
 
@@ -48,12 +48,16 @@ export class ProxyHttp implements IProxyHttp {
     return Axios.get(url, { params })
       .then<T>(this.fulfilled);
   }
-  public post<T, K>(api: string, data: K): Promise<T> {
+  public post<T, K>(api: string, data: K, config?: AxiosRequestConfig | undefined): Promise<T> {
     const url = this.common.dealPath(api, "POST");
-    return Axios.post(url, qs.stringify(data),
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }).then<T>(this.fulfilled);
+    if (!config) {
+      config = { headers: { "Content-Type": "application/x-www-form-urlencoded" } };
+    }
+    if (config && !config.headers) {
+      config.headers = { "Content-Type": "application/x-www-form-urlencoded" };
+    }
+    config.headers["Content-Type"] = "application/x-www-form-urlencoded";
+    return Axios.post(url, qs.stringify(data), config).then<T>(this.fulfilled);
   }
   public form<T>(api: string, form: FormData): Promise<T> {
     const url = this.common.dealPath(api, "POST");
@@ -76,18 +80,20 @@ export class ProxyHttp implements IProxyHttp {
 
   private addMockData(mockData: IMockData): void {
     const mock = new MockAdapter(Axios);
-    // tslint:disable-next-line:forin
     for (const key in mockData.get) {
-      const url = this.common.dealPath(key, "GET");
-      mock.onGet(url).reply(200, mockData.get[key]);
+      if (mockData.get.hasOwnProperty(key)) {
+        const url = this.common.dealPath(key, "GET");
+        mock.onGet(url).reply(200, mockData.get[key]);
+      }
     }
-    // tslint:disable-next-line:forin
     for (const key in mockData.post) {
-      const url = this.common.dealPath(key, "POST");
-      if (typeof mockData.post[key] === "function") {
-        mock.onPost(url).reply(mockData.post[key]);
-      } else {
-        mock.onPost(url).reply(200, mockData.post[key]);
+      if (mockData.post.hasOwnProperty(key)) {
+        const url = this.common.dealPath(key, "POST");
+        if (typeof mockData.post[key] === "function") {
+          mock.onPost(url).reply(mockData.post[key]);
+        } else {
+          mock.onPost(url).reply(200, mockData.post[key]);
+        }
       }
     }
     mock.onPost().reply(404);

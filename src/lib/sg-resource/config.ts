@@ -83,8 +83,10 @@ export interface IConfigAdapter {
   readonly domain: string;
   readonly localSite: string;
   readonly entrance: string;
+  /** 认证url */
   readonly jsSignUrl?: string;
   readonly jsApiList?: string[];
+  readonly appId?: string;
 
   getApi(method: string, apiName: string): string;
 }
@@ -114,6 +116,7 @@ export class ConfigAdapter implements IConfigAdapter {
   serviceFactory: any;
   jsSignUrl?: string;
   jsApiList?: string[] | undefined;
+  appId?: string;
 
   private curSite: ISite;
   private URL_TPL = "//{DOMAIN}{HOST_API}?appId=APPID&path=PATH&state=!STATE";
@@ -137,13 +140,14 @@ export class ConfigAdapter implements IConfigAdapter {
         .replace("APPID", this.curSite.appID) : "";
     this.jsSignUrl = !!serverConfig.wXJsSign ? "//" + this.curSite.remote + serverConfig.wXJsSign : undefined;
     this.jsApiList = serverConfig.jsApiList;
+    this.appId = this.curSite.appID;
   }
 
   public getApi(method: string, apiName: string): string {
     if (this.apiConfig[method] && this.apiConfig[method][apiName]) {
       return this.apiConfig[method][apiName];
     }
-    return "";
+    return apiName;
   }
 
   get token() {
