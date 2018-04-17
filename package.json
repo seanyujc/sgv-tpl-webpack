@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf dist && mkdirp dist ./dist/assets ./dist/dll",
-    "cpdll": "ncp ./dll/dll/ ./dist/dll/ && ncp ./dll/styles/ ./dist/styles/ && ncp ./dll/assets/ ./dist/assets/",
+    "cpdll": "ncp ./dll/dll/ ./dist/dll/",
     "cpassets": "ncp ./src/assets/images ./dist/assets/images",
     "dev": "cross-env NODE_ENV=DEV webpack-dev-server --open --config build/webpack.dev.js",
     "build:dev": "cross-env NODE_ENV=DEV npm run build",

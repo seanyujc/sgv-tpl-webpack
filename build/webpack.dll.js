@@ -16,7 +16,7 @@ module.exports = {
       'vee-validate',
       'moment',
     ],
-    styles: ['bootstrap-loader'],
+    // styles: ['bootstrap-loader'],
   },
   output: {
     path: path.resolve(__dirname, '../dll/dll/'),
