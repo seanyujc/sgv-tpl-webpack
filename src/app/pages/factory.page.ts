@@ -1,21 +1,21 @@
 // SGV-BUILD-PAGE-FAC # NOT DELETE
-// 'Foo' PAGE FACTORY START
-export function fooPagePreloading(): Promise<any> {
-  return new Promise((resolve) => {
-    require.ensure([], (require) => {
-      const foo = require("./foo/foo.vue").default;
-      resolve(foo);
-    });
-  });
-}
-// 'Foo' PAGE FACTORY END
 // 'Home' PAGE FACTORY START
 export function homePagePreloading(): Promise<any> {
-  return new Promise((resolve) => {
-    require.ensure([], (require) => {
-      const home = require("./home/home.vue").default;
-      resolve(home);
-    });
+  return import("./home/home.vue").catch(error => {
+    return dealOccurred(error, "Home");
   });
 }
 // 'Home' PAGE FACTORY END
+// 'Login' PAGE FACTORY START
+export function loginPagePreloading(): Promise<any> {
+  return import("./login/login.vue").catch(error => {
+    return dealOccurred(error, "Login");
+  });
+}
+// 'Login' PAGE FACTORY END
+/**
+ * 处理错误
+ */
+function dealOccurred(error: any, pageName = "") {
+  location.href = (window as any).__SWNextFullPath;
+}

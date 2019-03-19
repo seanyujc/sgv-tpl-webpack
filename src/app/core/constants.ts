@@ -1,20 +1,7 @@
-export const PULLDOWN_CONFIG = {
-  content: "下拉去刷新",
-  height: 60,
-  autoRefresh: false,
-  downContent: "下拉去刷新",
-  upContent: "释放去加载",
-  loadingContent: "加载中...",
-  clsPrefix: "xs-plugin-pulldown-",
-};
+export const LOGIN_INFO = "LOGIN_INFO";
 
-export const PULLUP_CONFIG = {
-  content: "上拉去刷新",
-  pullUpHeight: 60,
-  height: 40,
-  autoRefresh: false,
-  downContent: "释放去加载",
-  upContent: "上拉去刷新",
-  loadingContent: "加载中...",
-  clsPrefix: "xs-plugin-pullup-",
+export const AVATAR = {
+  account: require("../styles/images/avatar.png"),
+  boy: require("../styles/images/avatar_boy.png"),
+  girl: require("../styles/images/avatar_girl.png"),
 };

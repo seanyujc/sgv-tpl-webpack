@@ -1,32 +1,27 @@
-import { Env, IServerConfig } from "../../lib/sg-resource";
+import { Env, HEADER_TOKEN, IServerConfig } from "../../lib/sg-resource";
 import Common from "../core/common";
+import { LOGIN_INFO } from "../core/constants";
 
 export const serverConfig: IServerConfig = {
-  appKey: ["d2a57dc1d883fd21fb9951699df71cc7"],
-  env: Common.getEnv(),
+  appKey: [],
   debug: false,
+  env: Env.DEV,
+  isMock: false,
   protocol: window.location.protocol,
   publicPath: Common.getPublicPath(),
-  successCode: "000000",
-  sites: {},
-  isMock: false,
+  sites: Common.getSiteInfo(),
+  successCode: "0",
 };
-// 开发、测试、UAT、生产环境配置 remote: 远端API地址，local和appID在微信中调用jsapi使用。
-serverConfig.sites = Common.getSiteInfo();
 
-// if (!serverConfig.sites) {
-//   serverConfig.sites = {};
-//   serverConfig.sites[Env.DEV] = { remote: "172.16.107.134:7081", local: "localhost:7000", appID: "xxx" };
-//   serverConfig.sites[Env.TEST] = { remote: "172.16.107.229", local: "172.16.107.229", appID: "xxx" };
-//   serverConfig.sites[Env.UAT] = { remote: "172.16.103.211", local: "dh5.lianbi.com.cn", appID: "xxx" };
-//   serverConfig.sites[Env.PROD] = { remote: "172.16.103.211", local: "dh5.lianbi.com.cn", appID: "xxx" };
-// }
-// 如果全局配置了站点信息，则修改uat和生产环境
-if (!!(window as any).CONFIG_SITE) {
-  serverConfig.sites[Env.UAT].local = (window as any).CONFIG_SITE;
-  serverConfig.sites[Env.PROD].local = (window as any).CONFIG_SITE;
-}
-if (!!(window as any).CONFIG_REMOTE) {
-  serverConfig.sites[Env.UAT].remote = (window as any).CONFIG_REMOTE;
-  serverConfig.sites[Env.PROD].remote = (window as any).CONFIG_REMOTE;
-}
+serverConfig.failCallback = (res: any, resolve, reject) => {
+  if (res.errorCode === 1003 && res.subCode === 1001) {
+    localStorage.removeItem(HEADER_TOKEN);
+    localStorage.removeItem(LOGIN_INFO);
+    const nextPath = (window as any).__SWNextFullPath;
+    if (nextPath.indexOf("/login") === -1) {
+      location.href = "/login";
+    }
+  } else {
+    reject(res);
+  }
+};

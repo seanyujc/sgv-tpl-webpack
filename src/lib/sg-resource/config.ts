@@ -1,3 +1,4 @@
+import Axios from "axios";
 /**
  * 环境枚举
  */
@@ -8,6 +9,21 @@ export const enum Env {
   PROD,
 }
 
+export function getEnv(name: string) {
+  switch (name) {
+    case "DEV":
+      return Env.DEV;
+    case "TEST":
+      return Env.TEST;
+    case "UAT":
+      return Env.UAT;
+    case "PROD":
+      return Env.PROD;
+    default:
+      return Env.DEV;
+  }
+}
+
 /**
  * 站点信息
  */
@@ -15,6 +31,7 @@ export interface ISite {
   local: string;
   remote: string;
   appID?: string;
+  protocol?: string;
 }
 
 /**
@@ -28,18 +45,42 @@ export interface IHost {
 /**
  * 主机、站点集合对象
  */
-export declare interface IHosts { [key: string]: IHost; }
-export declare interface ISites { [key: string]: ISite; }
+export declare interface IHosts {
+  [key: string]: IHost;
+}
+export declare interface ISites {
+  [key: string]: ISite;
+}
 
 /**
  * 接口配置对象
  */
 export interface IApiConfig {
   [key: string]: any;
+  /**
+   * 主机信息
+   */
   hosts: IHosts;
+  /**
+   * post 方式接口配置
+   */
   post: { [key: string]: string };
+  /**
+   * get 方式接口配置
+   */
   get: { [key: string]: string };
-  serviceFactory: any;
+  /**
+   * put 方式接口配置
+   */
+  put: { [key: string]: any };
+  /**
+   * delete 方式接口配置
+   */
+  delete: { [key: string]: any };
+  /**
+   * 各服务代理（可选）
+   */
+  serviceFactory?: any;
 }
 
 /**
@@ -49,6 +90,8 @@ export interface IMockData {
   [key: string]: any;
   post: { [key: string]: any };
   get: { [key: string]: any };
+  put: { [key: string]: any };
+  delete: { [key: string]: any };
 }
 
 /**
@@ -62,8 +105,16 @@ export interface IServerConfig {
   publicPath: string;
   sites: ISites;
   successCode: string;
-  successCallback?: <T>(res: T, resolve: T | PromiseLike<T> | undefined, reject: any) => void;
-  failCallback?: <T>(res: T, reject: any) => void;
+  successCallback?: <T>(
+    res: T,
+    resolve: T | PromiseLike<T> | undefined,
+    reject: any,
+  ) => void;
+  failCallback?: <T>(
+    res: T,
+    resolve: (value?: T | PromiseLike<T> | undefined) => void,
+    reject: any,
+  ) => void;
   isMock?: boolean;
   wXJsSign?: string;
   wXOAuth?: string;
@@ -87,23 +138,34 @@ export interface IConfigAdapter {
   readonly jsSignUrl?: string;
   readonly jsApiList?: string[];
   readonly appId?: string;
+  sites: ISites;
+  curSite: ISite;
 
+  failCallback?: <T>(
+    res: T,
+    resolve: (value?: T | PromiseLike<T> | undefined) => void,
+    reject: any,
+  ) => void;
   getApi(method: string, apiName: string): string;
 }
 
-export interface IConfigAdapterConstructor {
-  new(apiConfig: IApiConfig, serverConfig: IServerConfig, mockData: IMockData): IConfigAdapter;
-}
+export type IConfigAdapterConstructor = new (
+  apiConfig: IApiConfig,
+  serverConfig: IServerConfig,
+  mockData: IMockData,
+) => IConfigAdapter;
 
 export function createConfigAdapter(
-  ctor: IConfigAdapterConstructor, apiConfig: IApiConfig, serverConfig: IServerConfig,
-  mockData: IMockData) {
+  ctor: IConfigAdapterConstructor,
+  apiConfig: IApiConfig,
+  serverConfig: IServerConfig,
+  mockData: IMockData,
+) {
   return new ctor(apiConfig, serverConfig, mockData);
 }
 
 export class ConfigAdapter implements IConfigAdapter {
-
-  env: Env;
+  env: Env = Env.DEV;
   debug: boolean;
   protocol: string;
   hosts: IHosts;
@@ -117,29 +179,67 @@ export class ConfigAdapter implements IConfigAdapter {
   jsSignUrl?: string;
   jsApiList?: string[] | undefined;
   appId?: string;
+  siteList: ISites;
+  serverConfig: IServerConfig;
+  curSite: ISite;
 
-  private curSite: ISite;
+  failCallback?: (res: any, resolve: any, reject: any) => void;
+
   private URL_TPL = "//{DOMAIN}{HOST_API}?appId=APPID&path=PATH&state=!STATE";
 
-  constructor(private apiConfig: IApiConfig, serverConfig: IServerConfig, mockData: IMockData) {
-    this.env = serverConfig.env;
-    this.debug = serverConfig.debug;
-    this.protocol = serverConfig.protocol;
+  constructor(
+    private apiConfig: IApiConfig,
+    serverConfig: IServerConfig,
+    mockData: IMockData,
+  ) {
+    this.serverConfig = serverConfig;
     this.hosts = apiConfig.hosts;
     this.serviceFactory = apiConfig.serviceFactory;
+    this.env = serverConfig.env;
+    this.debug = serverConfig.debug;
     this.successCode = serverConfig.successCode;
     this.isMock = serverConfig.isMock;
     this.mockData = mockData;
-    this.curSite = !!serverConfig.sites ? serverConfig.sites[this.env]
+    this.siteList = serverConfig.sites;
+    this.jsApiList = serverConfig.jsApiList;
+
+    if (serverConfig.failCallback) {
+      this.failCallback = serverConfig.failCallback;
+    }
+    this.dealConfig();
+    const url: any = "/config/site.json";
+    Axios.get(url).then(res => {
+      const o: any = {};
+      o[Env.DEV] = res.data.DEV;
+      o[Env.TEST] = res.data.TEST;
+      o[Env.UAT] = res.data.UAT;
+      o[Env.PROD] = res.data.MASTER;
+      this.env = getEnv(res.data.runtimes);
+      this.sites = o;
+      this.dealConfig();
+    });
+  }
+
+  dealConfig() {
+    this.curSite = !!this.serverConfig.sites
+      ? this.serverConfig.sites[this.env]
       : { local: window.location.host, remote: window.location.host };
     this.domain = this.curSite.remote;
-    this.localSite = this.protocol + "//" + this.curSite.local + serverConfig.publicPath;
-    this.entrance = !!serverConfig.wXOAuth && !!this.curSite.appID ?
-      this.protocol + this.URL_TPL.replace(/\{DOMAIN}/, this.curSite.remote)
-        .replace(/\{HOST_API}/, serverConfig.wXOAuth)
-        .replace("APPID", this.curSite.appID) : "";
-    this.jsSignUrl = !!serverConfig.wXJsSign ? "//" + this.curSite.remote + serverConfig.wXJsSign : undefined;
-    this.jsApiList = serverConfig.jsApiList;
+    this.localSite =
+      location.protocol +
+      "//" +
+      this.curSite.local +
+      this.serverConfig.publicPath;
+    this.entrance =
+      !!this.serverConfig.wXOAuth && !!this.curSite.appID
+        ? this.curSite.protocol +
+          this.URL_TPL.replace(/\{DOMAIN}/, this.curSite.remote)
+            .replace(/\{HOST_API}/, this.serverConfig.wXOAuth)
+            .replace("APPID", this.curSite.appID)
+        : "";
+    this.jsSignUrl = !!this.serverConfig.wXJsSign
+      ? "//" + this.curSite.remote + this.serverConfig.wXJsSign
+      : undefined;
     this.appId = this.curSite.appID;
   }
 
@@ -149,6 +249,13 @@ export class ConfigAdapter implements IConfigAdapter {
     }
     return apiName;
   }
+
+  set sites(val: ISites) {
+    this.serverConfig.sites = val;
+    this.dealConfig();
+  }
+
+  fetchConfigFromJson() {}
 
   get token() {
     return "d2a57dc1d883fd21fb9951699df71cc7";

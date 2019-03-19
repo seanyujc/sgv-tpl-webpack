@@ -18,7 +18,7 @@ export interface ICommon {
 }
 
 export interface ICommonConstructor {
-  new(): ICommon;
+  new (): ICommon;
 }
 
 export function createCommon(ctor: ICommonConstructor): ICommon {
@@ -26,7 +26,6 @@ export function createCommon(ctor: ICommonConstructor): ICommon {
 }
 
 export class Common implements ICommon {
-
   // private msgs: string[];
   // private isShowModal: boolean;
 
@@ -43,15 +42,25 @@ export class Common implements ICommon {
     let url = apiKey;
     method = method.toLocaleLowerCase();
     api = this.configAdapter.getApi(method, apiKey);
-    if (api === "") { return api; }
+    if (api === "") {
+      return api;
+    }
     if (api.indexOf(":") !== -1) {
-      url = "//{DOMAIN}{HOST}{API}";
+      url = "{PROTOCOL}//{DOMAIN}{HOST}{API}";
       const path = api.split(":");
       path[0] = this.trim(path[0]);
       path[1] = this.trim(path[1]);
       const host: IHost = this.configAdapter.hosts[path[0]];
-      const domain = host && host.domain ? host.domain : this.configAdapter.domain;
-      url = url.replace(/\{DOMAIN}/, domain).replace(/\{HOST}/, host.dir).replace(/\{API}/, path[1]);
+      const domain =
+        host && host.domain ? host.domain : this.configAdapter.domain;
+      url = url
+        .replace(
+          /\{PROTOCOL}/,
+          this.configAdapter.curSite.protocol || location.protocol,
+        )
+        .replace(/\{DOMAIN}/, domain)
+        .replace(/\{HOST}/, host.dir)
+        .replace(/\{API}/, path[1]);
     } else {
       url = api;
     }
@@ -67,5 +76,4 @@ export class Common implements ICommon {
     const surplus = str.substr(1, str.length);
     return first + surplus;
   }
-
 }

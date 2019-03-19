@@ -14,10 +14,19 @@ export abstract class SGVFactory {
    * @param serverConfig 服务器配置
    * @param mockData 模拟数据配置
    */
-  public static createConfigAdapter(apiConfig?: IApiConfig, serverConfig?: IServerConfig, mockData?: IMockData) {
+  public static createConfigAdapter(
+    apiConfig?: IApiConfig,
+    serverConfig?: IServerConfig,
+    mockData?: IMockData,
+  ) {
     if (!this.configAdapter) {
       if (!!apiConfig && !!serverConfig && !!mockData) {
-        this.configAdapter = createConfigAdapter(ConfigAdapter, apiConfig, serverConfig, mockData);
+        this.configAdapter = createConfigAdapter(
+          ConfigAdapter,
+          apiConfig,
+          serverConfig,
+          mockData,
+        );
       } else {
         throw new Error("config init fail!!");
       }
@@ -41,13 +50,23 @@ export abstract class SGVFactory {
 
   public static createVuePlugin() {
     return {
-      install: (Vue: any, options: any) => {
-        this.createConfigAdapter(options.apiConfig, options.serverConfig, options.mockData);
-        Vue.myGlobalMethod = () => {
-          // 逻辑...
-        };
+      install: (vue: any, { apiConfig, serverConfig, mockData }: any) => {
+        const configAdapter = this.createConfigAdapter(
+          apiConfig,
+          serverConfig,
+          mockData,
+        );
+        if (!vue.$sg) {
+          vue.$sg = { configAdapter };
+        } else {
+          vue.$sg.configAdapter = configAdapter;
+        }
+        vue.mixin({
+          created() {
+            this.$sg = vue.$sg;
+          },
+        });
       },
     };
   }
-
 }

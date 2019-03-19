@@ -1,0 +1,25 @@
+{
+  "DEV": {
+    "remote": "192.168.1.168:13086",
+    "local": "192.168.1.168:13086",
+    "appID": "xxx",
+    "protocol": "http:"
+  },
+  "TEST": {
+    "remote": "192.168.1.168:13086",
+    "local": "172.16.107.229",
+    "appID": "xxx",
+    "protocol": "http:"
+  },
+  "UAT": {
+    "remote": "192.168.1.168:13086/web-api",
+    "local": "lbnweb.haveoo.com",
+    "protocol": "https:"
+  },
+  "MASTER": {
+    "remote": "192.168.1.168:13086/web-api",
+    "local": "lbnweb.xylbn.cn",
+    "protocol": "https:"
+  },
+  "runtimes": "DEV"
+}

@@ -1,56 +1,97 @@
 <template>
-  <header>
-    <a class="back" href="javascript: void(0);" @click="back" >
-      <i></i>
-    </a>
-    <h4>{{title}}</h4>
-    <div class="tool-box">
-      <i class="icon c-service" @click="jumpCustomer" v-if="hasCService">
-      </i>
-      <i class="icon canlendar" @click="openCanlendar" v-if="hasCanlendar">
-      </i>
-      <i class="icon" :style="customButton.styles" :class="customButton.classes"  @click="customButton.click" v-if="hasCustomButton">
-        {{customButton.text}}
-      </i>
+  <div class="comp-module">
+    <div class="logo">
+      <img src="../../styles/images/logo.png"
+           alt="cchrpp logo">
     </div>
-  </header>
+    <h1>云GCP平台</h1>
+    <div class="account-box">
+      <img src="../../styles/images/avatar_boy.png"
+           alt="avatar">
+      <el-dropdown @command="handleCommand">
+        <span class="el-dropdown-link">
+          小铭<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="a">账户设置</el-dropdown-item>
+          <el-dropdown-item command="e"
+                            divided>退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+  </div>
 </template>
-
 <script lang="ts" src="./headbar.ts">
 </script>
-
 <style lang="scss" scoped>
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #fff;
-  z-index: 9999;
-  display: flex;
-  background: #fff;
+$color: #333;
+
+.comp-module {
+  height: 60px;
+  position: relative;
+  background: #2b3643;
 }
-.back {
-  width: 0.94rem;
-  height: 0.84rem;
-  i {
-    margin-top: 0.25rem;
-    display: block;
-    width: 100%;
-    height: 0.34rem;
-    background: no-repeat url(../../styles/images/back.png) center center;
-    background-size: auto 100%;
+.logo {
+  width: 102px;
+  float: left;
+  height: 100%;
+  position: relative;
+  img {
+    width: 66px;
+    height: 28px;
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translate(0, -50%);
   }
 }
-h4 {
-  flex: 1;
-  text-align: center;
-  font-size: 0.34rem;
-  line-height: 0.84rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+h1 {
+  float: left;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  font-family: PingFang-SC-Bold;
+  font-size: 20px;
+  color: #9ba3aa;
+  letter-spacing: 0;
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  padding: 0 0 0 11px;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 0;
+    display: inline-block;
+    height: 20px;
+    border-left: 1px solid #6d6f70;
+  }
 }
-.tool-box {
-  width: 0.94rem;
+.account-box {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+  float: right;
+  height: 32px;
+  img {
+    width: 32px;
+    height: 32px;
+    float: left;
+    border-radius: 16px;
+  }
+  .el-dropdown {
+    float: left;
+    margin: 0 30px 0 14px;
+    line-height: 32px;
+    cursor: pointer;
+  }
 }
+.el-dropdown-link {
+  font-family: PingFang-SC-Medium;
+  font-size: 14px;
+  color: #c6cfda;
+  letter-spacing: 0;
+}
+
 </style>

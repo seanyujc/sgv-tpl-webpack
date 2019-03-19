@@ -1,16 +1,12 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-      "tslint:recommended"
-  ],
+  "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {
-    "indent": [
-      true,
-      "spaces",
-      2
-    ],
-    "member-access": false
+    "indent": [true, "spaces", 2],
+    "member-access": false,
+    "arrow-parens": false,
+    "variable-name": false
   },
   "rulesDirectory": []
 }

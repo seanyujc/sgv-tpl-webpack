@@ -1,46 +1,61 @@
 import "reflect-metadata";
-import { SGVFactory } from "./factory";
+import Vue from "vue";
+import { createDecorator } from "vue-class-component";
+
+const objects: any[] = [];
 
 export function AutowiredService(target: any, key: string) {
-  const t = Reflect.getMetadata("design:type", target, key);
-  // if (t.name === "Object") {
-  const configAdapter = SGVFactory.createConfigAdapter();
-  const service = configAdapter.serviceFactory[getMethodName(key)];
-  // property value
-
-  // property getter
+  const type = Reflect.getMetadata("design:type", target, key);
+  let n: any = null;
+  for (const o of objects) {
+    if (o instanceof type) {
+      n = o;
+      break;
+    }
+  }
+  if (n == null) {
+    n = new type();
+    objects.push(n);
+  }
   const getter = () => {
-    if (service) {
-      return service.bind(configAdapter.serviceFactory)();
+    if (n) {
+      return n;
     } else {
       return () => {
         return null;
       };
     }
   };
-
-  // return Reflect.metadata("_" + key, service());
   if (delete target[key]) {
     Object.defineProperty(target, key, {
+      configurable: true,
+      enumerable: true,
       get: getter,
       set: undefined,
-      enumerable: true,
-      configurable: true,
     });
   }
-  // }
 }
 
-// export function ServiceInjection(serviceName: string) {
-//   const configAdapter = SGVFactory.createConfigAdapter();
-//   return <T extends { new(...args: any[]): {} }>(constructor: T) => {
-//     return class extends constructor {
-//       personService = configAdapter.serviceFactory[getMethodName(serviceName)].bind(configAdapter.serviceFactory)();
-//     };
-//   };
-// }
+export function Mutations(namespace?: string) {
+  // component options should be passed to the callback
+  // and update for the options object affect the component
 
-function getMethodName(key: string) {
-  const common = SGVFactory.createCommon();
-  return "create" + common.upperFirst(key);
+  // tslint:disable-next-line:only-arrow-functions
+  return function(
+    target: any,
+    methodName: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    const original = descriptor.value;
+    const name = namespace ? namespace + "/" + methodName : methodName;
+    descriptor.value = function commit() {
+      const args = [];
+      for (let i = 0; i < arguments.length; i++) {
+        args[i] = arguments[i];
+      }
+      if (original.apply(this, args) !== false) {
+        (this as any).$store.commit.apply(this, [name].concat(args));
+      }
+    };
+  };
 }
