@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { RouteConfig } from "vue-router";
 import VueRouter from "vue-router";
-import * as PageFactory from "./pages/factory.page";
 import { ConfigAdapter } from "../lib/sg-resource";
+import * as PageFactory from "./pages/factory.page";
 Vue.use(VueRouter);
 // tslint:disable:object-literal-sort-keys
 const routes: RouteConfig[] = [
