@@ -71,6 +71,8 @@ export default class LoginPage extends mixins(ComBaseComp)
   }
   mounted() {
     //
+    console.log(this.$sg);
+    
   }
   destroyed() {
     Common.removeClass(document.querySelector("html"), "login-page");

@@ -1,6 +1,4 @@
 import "reflect-metadata";
-import Vue from "vue";
-import { createDecorator } from "vue-class-component";
 
 const objects: any[] = [];
 

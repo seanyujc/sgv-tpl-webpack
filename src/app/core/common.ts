@@ -5,7 +5,7 @@ declare var SITE_INFO: string;
 
 export default class Common {
   /**
-   * 得到环境变量的配置
+   * 得到编译期环境变量的配置
    */
   static getPublicPath() {
     return PUBLIC_PATH;
@@ -17,7 +17,7 @@ export default class Common {
     o[Env.DEV] = siteInfo.DEV;
     o[Env.TEST] = siteInfo.TEST;
     o[Env.UAT] = siteInfo.UAT;
-    o[Env.PROD] = siteInfo.MASTER;
+    o[Env.MASTER] = siteInfo.MASTER;
     return o;
   }
 

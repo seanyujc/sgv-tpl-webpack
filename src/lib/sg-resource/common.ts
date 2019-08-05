@@ -15,11 +15,10 @@ export interface ICommon {
    */
   dealPath(apiKey: string, method: string): string;
   upperFirst(str: string): string;
+  getUrlQuery(key: string): string;
 }
 
-export interface ICommonConstructor {
-  new (): ICommon;
-}
+export type ICommonConstructor = new () => ICommon;
 
 export function createCommon(ctor: ICommonConstructor): ICommon {
   return new ctor();
@@ -52,7 +51,9 @@ export class Common implements ICommon {
       path[1] = this.trim(path[1]);
       const host: IHost = this.configAdapter.hosts[path[0]];
       const domain =
-        host && host.domain ? host.domain : this.configAdapter.domain;
+        host && host.domain
+          ? this.configAdapter.otherDomain[host.domain]
+          : this.configAdapter.domain;
       url = url
         .replace(
           /\{PROTOCOL}/,
@@ -75,5 +76,15 @@ export class Common implements ICommon {
     const first = str.substr(0, 1).toLocaleUpperCase();
     const surplus = str.substr(1, str.length);
     return first + surplus;
+  }
+
+  getUrlQuery(key: string) {
+    const regx = new RegExp("[&|?]" + key + "=([^&]+)&?");
+    const m = location.search.match(regx);
+    if (m != null) {
+      const [, value] = m;
+      return value;
+    }
+    return "";
   }
 }

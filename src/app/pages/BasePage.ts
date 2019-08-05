@@ -10,7 +10,7 @@ export default class BasePage extends ComBaseComp {
   beforeRouteEnter(to: Route, from: Route, next: any) {
     const headerToken = localStorage.getItem(HEADER_TOKEN);
     next((vm: Vue) => {
-      //
+      // 验证登录
       if (!headerToken) {
         vm.$router.replace({
           name: "loginReturn",

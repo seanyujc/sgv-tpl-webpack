@@ -17,10 +17,10 @@ export abstract class SGVFactory {
   public static createConfigAdapter(
     apiConfig?: IApiConfig,
     serverConfig?: IServerConfig,
-    mockData?: IMockData,
+    mockData: IMockData = { post: {}, get: {}, put: {}, delete: {} },
   ) {
     if (!this.configAdapter) {
-      if (!!apiConfig && !!serverConfig && !!mockData) {
+      if (!!apiConfig && !!serverConfig) {
         this.configAdapter = createConfigAdapter(
           ConfigAdapter,
           apiConfig,

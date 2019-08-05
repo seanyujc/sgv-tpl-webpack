@@ -1,9 +1,12 @@
 import Axios from "axios";
 import { ICommon, IConfigAdapter, IProxyHttp, SGVFactory } from ".";
 
-export interface IWechatShareParam extends wx.MenuShareAppMessagePara, wx.MenuShareQQPara,
-  wx.MenuShareQZonePara, wx.MenuShareTimelinePara, wx.MenuShareWeiboPara {
-}
+export interface IWechatShareParam
+  extends wx.MenuShareAppMessagePara,
+    wx.MenuShareQQPara,
+    wx.MenuShareQZonePara,
+    wx.MenuShareTimelinePara,
+    wx.MenuShareWeiboPara {}
 
 export interface IWechatService {
   isWechat: boolean;
@@ -12,16 +15,15 @@ export interface IWechatService {
   getLocation(): Promise<Coordinates>;
   scanQRCode(needResult?: boolean): Promise<string>;
 }
-export interface IWechatServiceConstructor {
-  new(): IWechatService;
-}
+export type IWechatServiceConstructor = new () => IWechatService;
 
-export function createWechatService(ctor: IWechatServiceConstructor): IWechatService {
+export function createWechatService(
+  ctor: IWechatServiceConstructor,
+): IWechatService {
   return new ctor();
 }
 
 export class WechatService implements IWechatService {
-
   private configAdapter: IConfigAdapter;
   private common: ICommon;
   private proxyHttp: IProxyHttp;
@@ -45,8 +47,8 @@ export class WechatService implements IWechatService {
         appId: this.configAdapter.appId,
         url: window.location.href.split("#")[0],
       },
-    }).then((res) => {
-      return new Promise<T>((resolve) => {
+    }).then(res => {
+      return new Promise<T>(resolve => {
         const data = res.data.data;
         data.debug = this.configAdapter.debug;
         data.jsApiList = this.configAdapter.jsApiList;
@@ -76,11 +78,14 @@ export class WechatService implements IWechatService {
         });
       } else {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((coordinates) => {
-            resolve(coordinates.coords);
-          }, (error) => {
-            reject(error);
-          });
+          navigator.geolocation.getCurrentPosition(
+            coordinates => {
+              resolve(coordinates.coords);
+            },
+            error => {
+              reject(error);
+            },
+          );
         } else {
           reject();
         }
@@ -89,7 +94,7 @@ export class WechatService implements IWechatService {
   }
 
   scanQRCode(needResult = false): Promise<string> {
-    return new Promise<string>((resolve) => {
+    return new Promise<string>(resolve => {
       if (this.isWechat) {
         wx.ready(() => {
           wx.scanQRCode({

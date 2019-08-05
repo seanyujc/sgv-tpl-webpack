@@ -6,22 +6,7 @@ export const enum Env {
   DEV = 1,
   TEST,
   UAT,
-  PROD,
-}
-
-export function getEnv(name: string) {
-  switch (name) {
-    case "DEV":
-      return Env.DEV;
-    case "TEST":
-      return Env.TEST;
-    case "UAT":
-      return Env.UAT;
-    case "PROD":
-      return Env.PROD;
-    default:
-      return Env.DEV;
-  }
+  MASTER,
 }
 
 /**
@@ -30,8 +15,11 @@ export function getEnv(name: string) {
 export interface ISite {
   local: string;
   remote: string;
+  otherRemotes?: { [key: string]: string };
+  entrance?: string;
   appID?: string;
   protocol?: string;
+  publicPath?: string;
 }
 
 /**
@@ -122,7 +110,7 @@ export interface IServerConfig {
 }
 
 export interface IConfigAdapter {
-  readonly env: Env;
+  env: Env;
   readonly debug: boolean;
   readonly protocol: string;
   readonly hosts: IHosts;
@@ -132,6 +120,7 @@ export interface IConfigAdapter {
   readonly mockData: IMockData;
   // readonly curSite: ISite;
   readonly domain: string;
+  readonly otherDomain: { [key: string]: string };
   readonly localSite: string;
   readonly entrance: string;
   /** 认证url */
@@ -149,6 +138,8 @@ export interface IConfigAdapter {
   getApi(method: string, apiName: string): string;
 }
 
+declare var NODE_ENV: string;
+
 export type IConfigAdapterConstructor = new (
   apiConfig: IApiConfig,
   serverConfig: IServerConfig,
@@ -165,6 +156,67 @@ export function createConfigAdapter(
 }
 
 export class ConfigAdapter implements IConfigAdapter {
+  static envInfo: any = {};
+
+  set sites(val: ISites) {
+    this.serverConfig.sites = val;
+    this.dealConfig();
+  }
+
+  get sites() {
+    return this.serverConfig.sites;
+  }
+
+  get token() {
+    return "d2a57dc1d883fd21fb9951699df71cc7";
+  }
+
+  static fetchConfig(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.envInfo.env) {
+        resolve(this.envInfo);
+      } else {
+        let publicPath = "/";
+        if (NODE_ENV === "production") {
+          publicPath = "/call_center/";
+        }
+        const url: any = publicPath + "config/site.json?t=" + Date.now();
+        Axios.get(url)
+          .then(res => {
+            const o: any = {};
+            o[Env.DEV] = res.data.DEV;
+            o[Env.TEST] = res.data.TEST;
+            o[Env.UAT] = res.data.UAT;
+            o[Env.MASTER] = res.data.MASTER;
+            const env = getEnv(res.data.runtimes);
+            const sites = o;
+            this.envInfo = { env, sites };
+            resolve(this.envInfo);
+          })
+          .catch(reason => {
+            reject();
+          });
+      }
+    });
+  }
+
+  /**
+   * 初始化并得到配置
+   */
+  static getConfig(): { env: Env; sites: ISites } {
+    if (!this.envInfo.env) {
+      const o: any = {};
+      o[Env.DEV] = __sg_site_config__.DEV;
+      o[Env.TEST] = __sg_site_config__.TEST;
+      o[Env.UAT] = __sg_site_config__.UAT;
+      o[Env.MASTER] = __sg_site_config__.MASTER;
+      const env = getEnv(__sg_site_config__.runtimes);
+      const sites = o;
+      this.envInfo = { env, sites };
+    }
+    return this.envInfo;
+  }
+
   env: Env = Env.DEV;
   debug: boolean;
   protocol: string;
@@ -173,6 +225,7 @@ export class ConfigAdapter implements IConfigAdapter {
   isMock?: boolean;
   mockData: IMockData;
   domain: string;
+  otherDomain: { [key: string]: string };
   localSite: string;
   entrance: string;
   serviceFactory: any;
@@ -207,17 +260,6 @@ export class ConfigAdapter implements IConfigAdapter {
       this.failCallback = serverConfig.failCallback;
     }
     this.dealConfig();
-    const url: any = "/config/site.json";
-    Axios.get(url).then(res => {
-      const o: any = {};
-      o[Env.DEV] = res.data.DEV;
-      o[Env.TEST] = res.data.TEST;
-      o[Env.UAT] = res.data.UAT;
-      o[Env.PROD] = res.data.MASTER;
-      this.env = getEnv(res.data.runtimes);
-      this.sites = o;
-      this.dealConfig();
-    });
   }
 
   dealConfig() {
@@ -225,6 +267,7 @@ export class ConfigAdapter implements IConfigAdapter {
       ? this.serverConfig.sites[this.env]
       : { local: window.location.host, remote: window.location.host };
     this.domain = this.curSite.remote;
+    this.otherDomain = this.curSite.otherRemotes || {};
     this.localSite =
       location.protocol +
       "//" +
@@ -250,14 +293,22 @@ export class ConfigAdapter implements IConfigAdapter {
     return apiName;
   }
 
-  set sites(val: ISites) {
-    this.serverConfig.sites = val;
-    this.dealConfig();
+  fetchConfigFromJson() {
+    //
   }
+}
 
-  fetchConfigFromJson() {}
-
-  get token() {
-    return "d2a57dc1d883fd21fb9951699df71cc7";
+export function getEnv(name: string) {
+  switch (name) {
+    case "DEV":
+      return Env.DEV;
+    case "TEST":
+      return Env.TEST;
+    case "UAT":
+      return Env.UAT;
+    case "MASTER":
+      return Env.MASTER;
+    default:
+      return Env.DEV;
   }
 }

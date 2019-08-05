@@ -1,12 +1,12 @@
 // tslint:disable-next-line:no-var-requires
 const MockAdapter = require("axios-mock-adapter");
 import Axios, { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "axios";
-import * as qs from "qs";
 import { ICommon } from "./common";
 import { IConfigAdapter, IMockData } from "./config";
 import { SGVFactory } from "./factory";
 
-export const HEADER_TOKEN = "HEADER_TOKEN";
+export const HEADER_TOKEN = "HEADER_TOKEN_SSU";
+export const PRODUCT_CODE = "PRODUCT_CODE";
 
 export interface IProxyHttp {
   /**
@@ -32,18 +32,16 @@ export interface IProxyHttp {
    * @param api config定义的接口
    * @param pathParams 请求参数
    */
-  delete<T>(api: string, pathParams?: string[]): Promise<T>;
+  delete<T, K>(api: string, pathParams?: string[], data?: K | any): Promise<T>;
   form<T>(api: string, form: FormData): Promise<T>;
-  getFile(url: string): Promise<{ data: Blob; type: any }>;
+  getFile(url: string, headers?: any): Promise<{ data: Blob; type: any }>;
   /**
    * 初始化代理
    */
   initInterceptors(): void;
 }
 
-export interface IProxyHttpConstructor {
-  new (): IProxyHttp;
-}
+export type IProxyHttpConstructor = new () => IProxyHttp;
 
 export function createProxyHttp(ctor: IProxyHttpConstructor): IProxyHttp {
   return new ctor();
@@ -93,12 +91,18 @@ export class ProxyHttp implements IProxyHttp {
     return Axios.post(url, data).then<T>(this.fulfilled);
   }
 
-  delete<T>(api: string, pathParams?: string[]): Promise<T> {
+  delete<T, K>(
+    api: string,
+    pathParams?: string[],
+    data: K | any = {},
+  ): Promise<T> {
     let url = this.common.dealPath(api, "DELETE");
     if (pathParams) {
       url = url + "/" + pathParams.join("/");
     }
-    return Axios.delete(url).then<T>(this.fulfilled);
+    return Axios.delete(url, {
+      params: data,
+    }).then<T>(this.fulfilled);
   }
 
   public form<T>(api: string, form: FormData): Promise<T> {
@@ -108,11 +112,9 @@ export class ProxyHttp implements IProxyHttp {
     }).then<T>(this.fulfilled);
   }
 
-  getFile(url: string): Promise<{ data: Blob; type: any }> {
+  getFile(url: string, headers: any = {}): Promise<{ data: Blob; type: any }> {
     return Axios.get(url, {
-      headers: {
-        accessToken: "",
-      },
+      headers,
       responseType: "blob",
     }).then((res: AxiosResponse) => {
       return new Promise<{ data: Blob; type: any }>((resolve, reject) => {
@@ -140,9 +142,13 @@ export class ProxyHttp implements IProxyHttp {
           });
         });
         const headerToken = localStorage.getItem(HEADER_TOKEN);
+        const productCode = localStorage.getItem(PRODUCT_CODE);
         // const headerToken = "829633E762F041D7800073258AAA3BA3";
-        config.headers.accessToken = headerToken;
-        config.headers.version = "1.0.0";
+        config.headers["access-token"] =
+          config.headers["access-token"] || headerToken || "";
+        config.headers["product-code"] =
+          config.headers["product-code"] || productCode || "ssu-service";
+        config.headers.version = config.headers.version || "1.0.0";
         return config;
       },
       error => {

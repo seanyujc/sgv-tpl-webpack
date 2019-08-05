@@ -6,14 +6,15 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // 读取配置文件
 const fs = require("fs");
-const file = path.resolve(__dirname, "config/site.json");
-const SITE_INFO = JSON.parse(fs.readFileSync(file));
+require(path.resolve(__dirname, "config/site.config.js"));
+const SITE_INFO = __sg_site_config__;
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = "development";
 }
 
-const publicPath = "/";
+const publicPath =
+  process.env.NODE_ENV === "development" ? "/" : "/call_center/";
 
 // fs.writeFileSync(
 //   path.resolve(__dirname, "dist/config/site.json"),
@@ -152,26 +153,19 @@ const webpackConfig = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/app/index.html"),
+      filename: "index.html",
       chunks: ["app", "vendors"],
       SITE_INFO,
+      publicPath: publicPath,
       favicon: path.resolve(__dirname, "src/app/favicon.png"),
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, "src/user/index.html"),
-    //   chunks: ["user", "vendors"],
-    //   filename: "user.html",
-    //   styles: [],
-    //   lib: [],
-    //   RELEASE_ENV,
-    //   SITE_INFO,
-    //   favicon: path.resolve(__dirname, "src/common/favicon.ico"),
-    // }),
     new CheckerPlugin(),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: "styles/[name]_[hash].css",
     }),
     new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       PUBLIC_PATH: JSON.stringify(publicPath),
       SITE_INFO: JSON.stringify(SITE_INFO),
     }),

@@ -2,6 +2,7 @@ import Vue from "vue";
 import { RouteConfig } from "vue-router";
 import VueRouter from "vue-router";
 import * as PageFactory from "./pages/factory.page";
+import { ConfigAdapter } from "../lib/sg-resource";
 Vue.use(VueRouter);
 // tslint:disable:object-literal-sort-keys
 const routes: RouteConfig[] = [
@@ -15,4 +16,15 @@ const routes: RouteConfig[] = [
     redirect: "login",
   },
 ];
-export default routes;
+const scrollBehavior = (to: any, from: any, savedPosition: any) => {
+  return savedPosition || { x: 0, y: 0 };
+};
+const { env, sites } = ConfigAdapter.getConfig();
+const router = new VueRouter({
+  base: sites[env].publicPath,
+  mode: "history",
+  routes,
+  scrollBehavior,
+});
+
+export default router;

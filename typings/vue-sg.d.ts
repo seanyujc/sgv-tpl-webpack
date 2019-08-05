@@ -7,6 +7,12 @@ export interface ISG {
 declare module "vue/types/vue" {
   interface Vue {
     $sg: ISG;
+    vm: Vue;
+    _self: Vue;
+  }
+  interface VueConstructor {
+    $sg: ISG;
+    vm: Vue;
   }
 }
 
